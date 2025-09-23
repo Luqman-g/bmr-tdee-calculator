@@ -32,11 +32,3 @@ export default function RootLayout({
     </html>
   );
 }
-<script>
-  function sendHeight() {
-    const height = document.body.scrollHeight;
-    window.parent.postMessage({ height }, "*");
-  }
-  window.addEventListener("load", sendHeight);
-  window.addEventListener("resize", sendHeight);
-</script>
