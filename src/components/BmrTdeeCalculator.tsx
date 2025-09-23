@@ -1,6 +1,5 @@
 // ================================
 // FILE: src/app/calories-bmr-tdee/page.tsx
-// One-file page + calculator component
 // ================================
 "use client";
 
@@ -31,28 +30,22 @@ import {
 } from "recharts";
 import { Calculator } from "lucide-react";
 
-// Allow the custom element <dotlottie-wc /> in TSX without type errors
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace JSX {
-    interface IntrinsicElements {
-      "dotlottie-wc": React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLElement>,
-        HTMLElement
-      > & {
-        src?: string;
-        style?: React.CSSProperties;
-        loop?: boolean;
-        autoplay?: boolean;
-        autoPlay?: boolean;
-      };
-    }
+// ======================================
+// Local wrapper for <dotlottie-wc> (Option B)
+// ======================================
+const DotLottieWC: React.FC<
+  React.HTMLAttributes<HTMLElement> & {
+    src?: string;
+    loop?: boolean;
+    autoplay?: boolean;
+    autoPlay?: boolean;
+    style?: React.CSSProperties;
   }
-}
+> = (props) => React.createElement("dotlottie-wc", props);
 
-// ================================
+// ======================================
 // Calculator: Types & constants
-// ================================
+// ======================================
 type Sex = "male" | "female";
 type ActivityKey = "sedentary" | "light" | "moderate" | "very" | "extra";
 type MacroTarget = "cut" | "maintain" | "bulk";
@@ -73,7 +66,7 @@ const ACTIVITY_MULTIPLIER: Record<ActivityKey, number> = {
   extra: 1.9,
 };
 
-// Vibrant chart colors (the original palette you liked)
+// Chart colors (your preferred palette)
 const COLOR_MAP: Record<string, string> = {
   BMR: "#6366f1", // indigo
   TDEE: "#10b981", // emerald
@@ -85,9 +78,7 @@ const COLORS = ["#4f46e5", "#f59e0b", "#10b981"]; // protein, fat, carbs
 
 const nf0 = new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 });
 
-// ================================
-// Calculator Helpers
-// ================================
+// Helpers
 function mifflinStJeor({
   sex,
   weightKg,
@@ -112,9 +103,9 @@ function macrosForCalories(weightKg: number, calories: number) {
   return { proteinG, fatG, carbsG };
 }
 
-// ================================
+// ======================================
 // Calculator Component
-// ================================
+// ======================================
 export function BmrTdeeCalculator() {
   const [sex, setSex] = useState<Sex>("male");
   const [age, setAge] = useState(28);
@@ -247,7 +238,7 @@ export function BmrTdeeCalculator() {
             <CardTitle className="text-2xl md:text-3xl">Results</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* BMR + TDEE summary */}
+            {/* Summary */}
             <div className="grid sm:grid-cols-2 gap-4">
               <div
                 className="rounded-xl p-5 text-white text-center"
@@ -319,7 +310,7 @@ export function BmrTdeeCalculator() {
                 </label>
               </RadioGroup>
 
-              {/* Donut chart (modest height for clean embedding) */}
+              {/* Donut */}
               <div style={{ width: "100%", height: 220 }} className="mt-3">
                 <ResponsiveContainer>
                   <PieChart>
@@ -392,20 +383,20 @@ export function BmrTdeeCalculator() {
   );
 }
 
-// ================================
+// ======================================
 // Page Layout
-// ================================
+// ======================================
 export default function CaloriesBmrTdeePage() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-white to-slate-50 text-slate-900">
-      {/* Smooth scroll for anchor links */}
+      {/* Smooth scrolling for in-page anchors */}
       <style jsx global>{`
         html {
           scroll-behavior: smooth;
         }
       `}</style>
 
-      {/* Load Lottie web component once */}
+      {/* Load the Lottie web component */}
       <Script
         src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.1/dist/dotlottie-wc.js"
         type="module"
@@ -418,10 +409,12 @@ export default function CaloriesBmrTdeePage() {
           <div>
             <p className="text-sm tracking-wide uppercase text-slate-500 mb-2">Learn by doing</p>
             <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mb-4">
-            Calories, BMR and TDEE explained⚡
+              Calories, BMR and TDEE explained with simple visuals
             </h1>
             <p className="text-lg md:text-xl text-slate-600 max-w-prose">
-              Calories are the fuel your body gets from food, and every day you burn this energy to stay alive and move. Your Basal Metabolic Rate (BMR) is the energy your body uses at rest, while your Total Daily Energy Expenditure (TDEE) represents your full daily burn, including movement, exercise, and digestion. This page simplifies it all with clear visuals and an interactive calculator, helping you understand exactly how your body uses energy.
+              Calories are energy from food. Your body spends energy to stay alive and to move.
+              BMR is your resting burn. TDEE is your total daily burn including movement and
+              digestion. This page shows it all with friendly graphics and a live calculator.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <a
@@ -439,11 +432,10 @@ export default function CaloriesBmrTdeePage() {
             </div>
           </div>
 
-          {/* Bigger Lottie (400x400) */}
           <div className="flex justify-center">
-            <dotlottie-wc
+            <DotLottieWC
               src="https://lottie.host/289483ab-fcb5-401b-b60f-5576210f1981/0pBXSPkPJG.lottie"
-              style={{ width: 500, height: 500 }}
+              style={{ width: 400, height: 400 }}
               autoPlay
               loop
             />
@@ -451,7 +443,7 @@ export default function CaloriesBmrTdeePage() {
         </div>
       </section>
 
-      {/* QUICK GUIDE — lively cards; removed the 'Visual cues' card */}
+      {/* QUICK GUIDE (with 'Visual cues' removed) */}
       <section className="px-6 max-w-7xl mx-auto pb-10">
         <div className="rounded-3xl bg-white border border-slate-200 shadow-sm p-6 md:p-10">
           <h2 className="text-2xl md:text-3xl font-bold mb-4">The quick guide</h2>
@@ -465,6 +457,7 @@ export default function CaloriesBmrTdeePage() {
                 less than you spend, you lose.
               </p>
             </div>
+
             <div className="rounded-2xl p-5 bg-sky-50 border border-sky-100 shadow-sm">
               <h3 className="font-semibold text-lg mb-1">🧠 BMR</h3>
               <p className="text-slate-700">
@@ -472,6 +465,7 @@ export default function CaloriesBmrTdeePage() {
                 bed, you would still burn energy breathing, pumping blood, and repairing cells.
               </p>
             </div>
+
             <div className="rounded-2xl p-5 bg-emerald-50 border border-emerald-100 shadow-sm">
               <h3 className="font-semibold text-lg mb-1">🏃 TDEE</h3>
               <p className="text-slate-700">
@@ -481,7 +475,6 @@ export default function CaloriesBmrTdeePage() {
             </div>
           </div>
 
-          {/* Kept a single explanatory card (previously paired with 'Visual cues') */}
           <div className="mt-6 grid grid-cols-1 gap-6">
             <div className="rounded-2xl p-5 bg-white border border-slate-200 shadow-md">
               <h3 className="font-semibold text-lg mb-1">How they connect</h3>
