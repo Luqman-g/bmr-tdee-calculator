@@ -4,7 +4,7 @@
 "use client";
 
 import Script from "next/script";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -44,7 +44,7 @@ const DotLottieWC: React.FC<
 > = (props) => React.createElement("dotlottie-wc", props);
 
 // ======================================
-// Calculator: Types & constants
+// Types & constants
 // ======================================
 type Sex = "male" | "female";
 type ActivityKey = "sedentary" | "light" | "moderate" | "very" | "extra";
@@ -78,7 +78,9 @@ const COLORS = ["#4f46e5", "#f59e0b", "#10b981"]; // protein, fat, carbs
 
 const nf0 = new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 });
 
+// ======================================
 // Helpers
+// ======================================
 function mifflinStJeor({
   sex,
   weightKg,
@@ -384,9 +386,29 @@ export function BmrTdeeCalculator() {
 }
 
 // ======================================
-// Page Layout
+// Page Layout (+ auto-resize for iframe embeds)
 // ======================================
 export default function CaloriesBmrTdeePage() {
+  // Auto-resize: post page height to parent for iframe embeds
+  useEffect(() => {
+    const post = () =>
+      window.parent?.postMessage({ height: document.body.scrollHeight }, "*");
+
+    // Update on load, resize, and DOM changes
+    post();
+    window.addEventListener("load", post);
+    window.addEventListener("resize", post);
+
+    const ro = new ResizeObserver(post);
+    ro.observe(document.body);
+
+    return () => {
+      window.removeEventListener("load", post);
+      window.removeEventListener("resize", post);
+      ro.disconnect();
+    };
+  }, []);
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-white to-slate-50 text-slate-900">
       {/* Smooth scrolling for in-page anchors */}
