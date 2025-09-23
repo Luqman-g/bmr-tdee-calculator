@@ -28,6 +28,7 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
+  Legend,
 } from "recharts";
 import { Calculator } from "lucide-react";
 
@@ -130,6 +131,7 @@ export default function BmrTdeeCalculator() {
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {/* Inputs */}
+
         <Card>
           <CardHeader>
             <CardTitle>Inputs</CardTitle>
@@ -242,21 +244,48 @@ export default function BmrTdeeCalculator() {
             </div>
 
             <div>
-              <h4 className="mb-2 text-sm font-medium">
-                Macro split (Maintain)
-              </h4>
-              <div className="h-56">
-                <ResponsiveContainer>
-                  <PieChart>
-                    <Pie data={pieData} dataKey="value" nameKey="name" outerRadius={80}>
-                      {pieData.map((_, idx) => (
-                        <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <ReTooltip formatter={(v) => `${v} g`} />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
+              <h4 className="mb-2 text-sm font-medium">Macro split (Maintain)</h4>
+
+              <p className="mb-2 text-sm font-small">A macro split is how you divide daily calories between protein, 
+                carbs, and fats to match goals like cutting, maintaining, or bulking.</p>
+
+                  <div className="h-56">
+                    <ResponsiveContainer>
+                      <PieChart>
+                        <Pie
+                          data={pieData}
+                          dataKey="value"
+                          nameKey="name"
+                          innerRadius={50}   // donut style
+                          outerRadius={90}
+                          paddingAngle={4}
+                          cornerRadius={6}
+                        >
+                          {pieData.map((entry, idx) => (
+                            <Cell key={`slice-${idx}`} fill={COLORS[idx % COLORS.length]} />
+                          ))}
+                        </Pie>
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+
+                  {/* Custom legend with grams */}
+                  <div className="mt-3 flex justify-center gap-6 text-sm">
+                    <div className="flex items-center gap-2">
+                      <span className="h-3 w-3 rounded-full" style={{ background: COLORS[0] }} />
+                      <span>Protein: {macros.proteinG} g</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="h-3 w-3 rounded-full" style={{ background: COLORS[1] }} />
+                      <span>Fat: {macros.fatG} g</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="h-3 w-3 rounded-full" style={{ background: COLORS[2] }} />
+                      <span>Carbs: {macros.carbsG} g</span>
+                    </div>
+                  </div>
+
+
             </div>
           </CardContent>
         </Card>
@@ -279,6 +308,23 @@ export default function BmrTdeeCalculator() {
             </ResponsiveContainer>
           </div>
         </CardContent>
+
+        <div className="mt-6 flex flex-wrap gap-3">
+  <Button
+    onClick={() => window.print()}
+    className="bg-indigo-600 hover:bg-indigo-700 shadow-md"
+  >
+    Download PDF
+  </Button>
+  <Button
+    onClick={() => navigator.clipboard.writeText(window.location.href)}
+    className="bg-emerald-600 hover:bg-emerald-700 shadow-md"
+  >
+    Share Link
+  </Button>
+</div>
+
+
       </Card>
     </div>
   );
