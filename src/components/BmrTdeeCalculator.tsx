@@ -409,7 +409,7 @@ export default function CaloriesBmrTdeePage() {
         <div className="grid md:grid-cols-2 gap-10 items-center">
           {/* Text first on mobile, left on desktop */}
           <div className="order-1 md:order-1 text-center md:text-left">
-            <p className="text-sm tracking-wide uppercase text-slate-500 mb-2">Learn by doing</p>
+            
             <h1 className="text-3xl md:text-5xl font-extrabold leading-tight tracking-tight mb-4 break-words">
               Calories, BMR and TDEE explained
             </h1>
