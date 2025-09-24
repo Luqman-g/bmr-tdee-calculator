@@ -4,7 +4,7 @@
 "use client";
 
 import Script from "next/script";
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -31,7 +31,7 @@ import {
 import { Calculator } from "lucide-react";
 
 // ======================================
-// Local wrapper for <dotlottie-wc> (Option B)
+// Local wrapper for <dotlottie-wc> (custom element)
 // ======================================
 const DotLottieWC: React.FC<
   React.HTMLAttributes<HTMLElement> & {
@@ -66,7 +66,7 @@ const ACTIVITY_MULTIPLIER: Record<ActivityKey, number> = {
   extra: 1.9,
 };
 
-// Chart colors (your preferred palette)
+// Chart colors
 const COLOR_MAP: Record<string, string> = {
   BMR: "#6366f1", // indigo
   TDEE: "#10b981", // emerald
@@ -386,36 +386,15 @@ export function BmrTdeeCalculator() {
 }
 
 // ======================================
-// Page Layout (+ auto-resize for iframe embeds)
+// Page Layout (mobile-friendly hero + Lottie)
 // ======================================
 export default function CaloriesBmrTdeePage() {
-  // Auto-resize: post page height to parent for iframe embeds
-  useEffect(() => {
-    const post = () =>
-      window.parent?.postMessage({ height: document.body.scrollHeight }, "*");
-
-    // Update on load, resize, and DOM changes
-    post();
-    window.addEventListener("load", post);
-    window.addEventListener("resize", post);
-
-    const ro = new ResizeObserver(post);
-    ro.observe(document.body);
-
-    return () => {
-      window.removeEventListener("load", post);
-      window.removeEventListener("resize", post);
-      ro.disconnect();
-    };
-  }, []);
-
   return (
     <main className="min-h-screen bg-gradient-to-b from-white to-slate-50 text-slate-900">
-      {/* Smooth scrolling for in-page anchors */}
+      {/* Smooth scrolling + make custom element block-level for centering */}
       <style jsx global>{`
-        html {
-          scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
+        dotlottie-wc { display: block; }
       `}</style>
 
       {/* Load the Lottie web component */}
@@ -425,20 +404,19 @@ export default function CaloriesBmrTdeePage() {
         strategy="afterInteractive"
       />
 
-      {/* HERO */}
-      <section className="px-6 max-w-7xl mx-auto py-14">
+      {/* HERO (mobile-centered, desktop split) */}
+      <section className="px-6 max-w-7xl mx-auto pt-10 pb-12 md:py-16">
         <div className="grid md:grid-cols-2 gap-10 items-center">
-          <div>
+          {/* Text first on mobile, left on desktop */}
+          <div className="order-1 md:order-1 text-center md:text-left">
             <p className="text-sm tracking-wide uppercase text-slate-500 mb-2">Learn by doing</p>
-            <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mb-4">
-              Calories, BMR and TDEE explained with simple visuals
+            <h1 className="text-3xl md:text-5xl font-extrabold leading-tight tracking-tight mb-4 break-words">
+              Calories, BMR and TDEE explained
             </h1>
-            <p className="text-lg md:text-xl text-slate-600 max-w-prose">
-              Calories are energy from food. Your body spends energy to stay alive and to move.
-              BMR is your resting burn. TDEE is your total daily burn including movement and
-              digestion. This page shows it all with friendly graphics and a live calculator.
+            <p className="text-lg md:text-xl text-slate-600 max-w-prose mx-auto md:mx-0">
+              Calories are the fuel your body gets from food, and every day you burn this energy to stay alive and move. Your Basal Metabolic Rate (BMR) is the energy your body uses at rest, while your Total Daily Energy Expenditure (TDEE) represents your full daily burn, including movement, exercise, and digestion. This page simplifies it all with clear visuals and an interactive calculator, helping you understand exactly how your body uses energy.
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap gap-3 justify-center md:justify-start">
               <a
                 href="#calculator"
                 className="rounded-2xl px-5 py-3 bg-black text-white font-semibold shadow"
@@ -454,10 +432,11 @@ export default function CaloriesBmrTdeePage() {
             </div>
           </div>
 
-          <div className="flex justify-center">
+          {/* Lottie centered on all breakpoints, responsive size */}
+          <div className="order-2 md:order-2 flex justify-center">
             <DotLottieWC
               src="https://lottie.host/289483ab-fcb5-401b-b60f-5576210f1981/0pBXSPkPJG.lottie"
-              style={{ width: 400, height: 400 }}
+              className="w-[260px] h-[260px] sm:w-[320px] sm:h-[320px] md:w-[420px] md:h-[420px]"
               autoPlay
               loop
             />
@@ -465,10 +444,10 @@ export default function CaloriesBmrTdeePage() {
         </div>
       </section>
 
-      {/* QUICK GUIDE (with 'Visual cues' removed) */}
+      {/* QUICK GUIDE */}
       <section className="px-6 max-w-7xl mx-auto pb-10">
         <div className="rounded-3xl bg-white border border-slate-200 shadow-sm p-6 md:p-10">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">The quick guide</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4">Every thing you need to know</h2>
 
           <div className="grid md:grid-cols-3 gap-6">
             <div className="rounded-2xl p-5 bg-orange-50 border border-orange-100 shadow-sm">
@@ -522,12 +501,12 @@ export default function CaloriesBmrTdeePage() {
       <section id="cta" className="px-6 max-w-7xl mx-auto py-10">
         <div className="rounded-3xl bg-black text-white p-8 text-center">
           <h2 className="text-2xl md:text-4xl font-extrabold mb-2">
-            Need a custom explainer or calculator for your site
+            Need a custom explainer or an interactive app for your site
           </h2>
           <p className="mb-4 text-white/90">
-            I design and build interactive content that teaches and converts. Let us talk about your idea.
+           I design and build interactive content that not only educates but also drives conversions. Let’s bring your idea to life.
           </p>
-          <a href="/contact" className="px-5 py-3 bg-white text-black rounded-2xl font-semibold">
+          <a href="https://luqman.design/contact/" className="px-5 py-3 bg-white text-black rounded-2xl font-semibold">
             Book a 15 min call
           </a>
         </div>
