@@ -416,20 +416,7 @@ export default function CaloriesBmrTdeePage() {
             <p className="text-lg md:text-xl text-slate-600 max-w-prose mx-auto md:mx-0">
               Calories are the fuel your body gets from food, and every day you burn this energy to stay alive and move. Your Basal Metabolic Rate (BMR) is the energy your body uses at rest, while your Total Daily Energy Expenditure (TDEE) represents your full daily burn, including movement, exercise, and digestion. This page simplifies it all with clear visuals and an interactive calculator, helping you understand exactly how your body uses energy.
             </p>
-            <div className="mt-6 flex flex-wrap gap-3 justify-center md:justify-start">
-              <a
-                href="#calculator"
-                className="rounded-2xl px-5 py-3 bg-black text-white font-semibold shadow"
-              >
-                Open the calculator
-              </a>
-              <a
-                href="#cta"
-                className="rounded-2xl px-5 py-3 bg-white border border-slate-200 shadow-sm font-semibold"
-              >
-                Talk to Luqman
-              </a>
-            </div>
+            
           </div>
 
           {/* Lottie centered on all breakpoints, responsive size */}
