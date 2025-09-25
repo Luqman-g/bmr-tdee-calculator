@@ -493,9 +493,7 @@ export default function CaloriesBmrTdeePage() {
           <p className="mb-4 text-white/90">
            I design and build interactive content that not only educates but also drives conversions. Let’s bring your idea to life.
           </p>
-          <a href="https://luqman.design/contact/" className="px-5 py-3 bg-white text-black rounded-2xl font-semibold">
-            Book a 15 min call
-          </a>
+          
         </div>
         <p className="text-xs text-slate-500 mt-4 text-center">
           This page is for education. It is not medical advice.
